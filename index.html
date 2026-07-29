@@ -1,43 +1,88 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#000091"><title>Observatoire de la transition énergétique · Val-d’Oise</title>
-  <link rel="icon" href="favicon.svg"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="description" content="Observatoire cartographique de la transition énergétique dans le Val-d’Oise — DDT 95">
+  <title>Transition énergétique · Val-d’Oise · DDT 95</title>
+  <link rel="preconnect" href="https://tile.openstreetmap.org">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="styles.css?v=20260729e">
 </head>
 <body>
-<div class="app">
   <header class="topbar">
-    <a class="brand" href="https://ddt95.github.io/atlas-territorial-95/" aria-label="Retour à l’Atlas"><img src="prefet-val-doise.svg" alt="Préfet du Val-d’Oise"></a>
-    <div class="title"><p>Énergie & climat · Val-d’Oise</p><h1>Observatoire de la transition énergétique</h1><span>Consommation · production · rénovation · qualité de l’air</span></div>
-    <div class="fresh"><i></i><div><b>Données publiques actualisées</b><small id="freshness">Chargement des sources…</small></div></div>
+    <a class="brand-logo-link" href="https://ddt95.github.io/atlas-territorial-95/" aria-label="Retour à l’Atlas territorial"><img class="brand-logo" src="prefet-val-doise.svg" alt="Préfet du Val-d’Oise"></a>
+    <div class="title-block">
+      <span class="eyebrow">ÉNERGIE ET CLIMAT · VAL-D’OISE</span>
+      <h1>Transition énergétique</h1>
+      <p>Consommation · production · rénovation · qualité de l’air</p>
+    </div>
+    <button id="mobileLayers" class="mobile-layers" aria-controls="layerSidebar" aria-expanded="false">Données</button>
+    <div class="livebox"><span class="fresh-dot"></span><div><strong>12 lectures territoriales prêtes</strong><small>Agence ORE · RTE · ADEME · Airparif</small></div></div>
   </header>
-  <nav class="tabs" aria-label="Thématiques">
-    <button class="active" data-theme="consumption">Consommation</button><button data-theme="production">Production</button><button data-theme="renovation">Rénovation</button><button data-theme="air">Qualité de l’air</button><button data-view="dashboard">Tableau de bord</button>
-  </nav>
-  <main>
-    <aside class="panel">
-      <div class="panel-intro"><p class="kicker">EXPLORER LE TERRITOIRE</p><h2 id="question">Où l’énergie est-elle consommée ?</h2><p id="intro">Compare les communes, les filières et les secteurs d’activité.</p>
-        <form id="search"><span>⌕</span><input id="query" type="search" placeholder="Commune du Val-d’Oise…" autocomplete="off"><button>Rechercher</button></form>
-        <div id="suggestions" class="suggestions"></div>
-      </div>
-      <div class="panel-scroll">
-        <section><div class="section-title"><div><h3>Lecture de la carte</h3><p>Choisis l’indicateur à représenter.</p></div><span class="source-ok">OPEN DATA</span></div><div id="layers" class="layers"></div></section>
-        <section class="source"><h3>Sources mobilisées</h3><p id="sourceText">Agence ORE · gestionnaires d’énergie</p><a id="sourceLink" href="https://opendata.agenceore.fr/" target="_blank" rel="noreferrer">Consulter la source ↗</a></section>
-        <section class="method"><h3>À savoir</h3><p id="methodText">Les consommations secrétisées par les gestionnaires ne sont pas reconstituées.</p></section>
+  <div class="progress"><span></span></div>
+
+  <main class="workspace">
+    <aside id="layerSidebar" class="sidebar" aria-label="Choix des données">
+      <div class="sidebar-intro"><div><span class="eyebrow">EXPLORER LE TERRITOIRE</span><h2>Quelle transition<br>près de chez moi ?</h2><p>Recherchez un lieu, choisissez une donnée et cliquez sur une commune pour lire son profil énergétique.</p></div></div>
+
+      <label class="search-box">
+        <span>Rechercher une commune ou une adresse</span>
+        <div><input id="searchInput" type="search" placeholder="Ex. Pontoise" autocomplete="off"><button id="searchButton" aria-label="Rechercher">→</button></div>
+      </label>
+      <div id="searchResults" class="search-results" hidden></div>
+
+      <div class="quick-actions"><button id="resetPanel">Recentrer</button><button id="openDashboard">Données & évolutions</button></div>
+      <div class="basemap-choice"><strong>Fond de carte</strong><div><button class="active" data-basemap="plan">Plan neutre</button><button data-basemap="ortho">Photo aérienne</button></div></div>
+
+      <div class="theme-heading"><span>COUCHES CARTOGRAPHIQUES</span><button id="clearLayers">Tout effacer</button></div>
+      <div id="layerList" class="layer-list"></div>
+
+      <button id="openSources" class="sources-inline">Sources, millésimes et licences</button>
+      <div class="sidebar-footer">
+        <div class="fresh-dot"></div>
+        <div><strong>5 sources publiques consolidées</strong><small>Actualisation du 29 juillet 2026</small></div>
       </div>
     </aside>
-    <section class="workspace">
+
+    <section class="map-shell" aria-label="Carte interactive">
       <div id="map"></div>
-      <div class="map-key"><b id="legendTitle">Consommation 2024</b><div class="gradient"></div><div><span>Faible</span><span>Forte</span></div></div>
-      <div class="map-help"><b>Clique sur une commune</b><span>pour ouvrir sa fiche énergétique</span></div>
-      <button id="home" class="home">⌂ Recentrer</button>
-      <div class="stats" id="stats"></div>
-      <aside id="drawer" class="drawer" aria-live="polite"><button id="close" aria-label="Fermer">×</button><div id="drawerContent"></div></aside>
-      <section id="dashboard" class="dashboard" hidden><div class="dash-head"><div><p class="kicker">SYNTHÈSE DÉPARTEMENTALE</p><h2>La transition énergétique en un regard</h2></div><button id="closeDashboard">Retour à la carte</button></div><div id="dashboardContent"></div></section>
+      <div id="mapLegend" class="map-legend"><strong>Lecture de la carte</strong><span>Activez une couche pour afficher sa légende.</span></div>
+      <div class="map-note"><span class="pulse"></span><span id="mapStatus">Chargement des données territoriales…</span></div>
+      <button id="resetView" class="map-reset" title="Recentrer sur le Val-d’Oise" aria-label="Recentrer sur le Val-d’Oise">⌂</button>
     </section>
+
+    <aside id="detailPanel" class="detail-panel" aria-live="polite">
+      <button id="closeDetail" class="close-btn" aria-label="Fermer le panneau">×</button>
+      <div id="detailContent"></div>
+    </aside>
   </main>
-  <footer><span>DDT du Val-d’Oise · Atlas territorial</span><span>Licence Ouverte 2.0 · ODbL selon les sources</span></footer>
-</div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="app.js"></script>
-</body></html>
+
+  <dialog id="dashboardDialog" class="dialog dashboard-dialog">
+    <button class="dialog-close" data-close="dashboardDialog" aria-label="Fermer">×</button>
+    <div class="dialog-header"><span class="eyebrow">PORTRAIT DÉPARTEMENTAL</span><h2>Données & évolutions</h2><p>Un portrait croisé des consommations, de la production locale et de la performance énergétique des logements.</p></div>
+    <div id="dashboardKpis" class="dashboard-kpis"></div>
+    <div class="dashboard-grid">
+      <article class="chart-card span-2"><div><span class="chart-kicker">CONSOMMATION</span><h3>Évolution depuis 2020</h3><p>Électricité et gaz · Agence ORE</p></div><canvas id="consumptionChart"></canvas></article>
+      <article class="insight-card"><span>À RETENIR</span><strong id="insightValue">—</strong><p id="insightText">Analyse en cours.</p></article>
+      <article class="chart-card"><div><span class="chart-kicker">SECTEURS</span><h3>Répartition des usages</h3><p>Millésime 2024 · Agence ORE</p></div><canvas id="sectorChart"></canvas></article>
+      <article class="chart-card"><div><span class="chart-kicker">PRODUCTION</span><h3>Filières en service</h3><p>Puissance publiée · ODRÉ / RTE</p></div><canvas id="productionChart"></canvas></article>
+      <article class="chart-card span-2"><div><span class="chart-kicker">RÉNOVATION</span><h3>Répartition des étiquettes DPE</h3><p>Logements existants depuis juillet 2021 · ADEME</p></div><canvas id="dpeChart"></canvas></article>
+      <article class="dashboard-note"><span>COMMENT LIRE</span><h3>Des données publiques avec des périmètres différents</h3><p>Les DPE enregistrés ne représentent pas tout le parc. Les consommations et productions respectent les règles de secret statistique des producteurs.</p><small>Dernière consolidation : 29 juillet 2026.</small></article>
+    </div>
+  </dialog>
+
+  <dialog id="sourcesDialog" class="dialog sources-dialog">
+    <button class="dialog-close" data-close="sourcesDialog" aria-label="Fermer">×</button>
+    <div class="dialog-header"><span class="eyebrow">TRAÇABILITÉ</span><h2>Sources et millésimes</h2><p>Chaque lecture renvoie vers la source officielle et conserve ses précautions d’usage.</p></div>
+    <div id="sourceCards" class="source-cards"></div>
+  </dialog>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="app.js?v=20260729e"></script>
+</body>
+</html>
