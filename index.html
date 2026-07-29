@@ -1,1 +1,43 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Transition énergétique · DDT 95</title><link rel="stylesheet" href="style.css"></head><body><header><img src="https://ddt95.github.io/atlas-territorial-95/prefet-val-doise-logo.png" alt="Préfet du Val-d’Oise"><div><small>DIRECTION DÉPARTEMENTALE DES TERRITOIRES</small><strong>Transition énergétique</strong></div><a href="https://ddt95.github.io/atlas-territorial-95/">← Atlas</a></header><main><p class="eyebrow">LECTURE 10 · PRÉFIGURATION</p><h1>Consommer moins.<br><span>Produire autrement.</span></h1><p class="lead">Une future lecture territoriale des consommations, productions renouvelables, rénovations et de la qualité de l’air.</p><section><h2>Ce que l’observatoire donnera à lire</h2><div class="grid"><article><b>01</b><h3>Consommations</h3><p>Énergie par secteur, commune et évolution temporelle.</p></article><article><b>02</b><h3>Productions</h3><p>Installations renouvelables, puissance et potentiel territorial.</p></article><article><b>03</b><h3>Habitat & air</h3><p>DPE, rénovation énergétique et indicateurs de qualité de l’air.</p></article></div></section></main><footer>DDT du Val-d’Oise · Page de préfiguration</footer></body></html>
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#000091"><title>Observatoire de la transition énergétique · Val-d’Oise</title>
+  <link rel="icon" href="favicon.svg"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="https://ddt95.github.io/atlas-territorial-95/" aria-label="Retour à l’Atlas"><img src="prefet-val-doise.svg" alt="Préfet du Val-d’Oise"></a>
+    <div class="title"><p>Énergie & climat · Val-d’Oise</p><h1>Observatoire de la transition énergétique</h1><span>Consommation · production · rénovation · qualité de l’air</span></div>
+    <div class="fresh"><i></i><div><b>Données publiques actualisées</b><small id="freshness">Chargement des sources…</small></div></div>
+  </header>
+  <nav class="tabs" aria-label="Thématiques">
+    <button class="active" data-theme="consumption">Consommation</button><button data-theme="production">Production</button><button data-theme="renovation">Rénovation</button><button data-theme="air">Qualité de l’air</button><button data-view="dashboard">Tableau de bord</button>
+  </nav>
+  <main>
+    <aside class="panel">
+      <div class="panel-intro"><p class="kicker">EXPLORER LE TERRITOIRE</p><h2 id="question">Où l’énergie est-elle consommée ?</h2><p id="intro">Compare les communes, les filières et les secteurs d’activité.</p>
+        <form id="search"><span>⌕</span><input id="query" type="search" placeholder="Commune du Val-d’Oise…" autocomplete="off"><button>Rechercher</button></form>
+        <div id="suggestions" class="suggestions"></div>
+      </div>
+      <div class="panel-scroll">
+        <section><div class="section-title"><div><h3>Lecture de la carte</h3><p>Choisis l’indicateur à représenter.</p></div><span class="source-ok">OPEN DATA</span></div><div id="layers" class="layers"></div></section>
+        <section class="source"><h3>Sources mobilisées</h3><p id="sourceText">Agence ORE · gestionnaires d’énergie</p><a id="sourceLink" href="https://opendata.agenceore.fr/" target="_blank" rel="noreferrer">Consulter la source ↗</a></section>
+        <section class="method"><h3>À savoir</h3><p id="methodText">Les consommations secrétisées par les gestionnaires ne sont pas reconstituées.</p></section>
+      </div>
+    </aside>
+    <section class="workspace">
+      <div id="map"></div>
+      <div class="map-key"><b id="legendTitle">Consommation 2024</b><div class="gradient"></div><div><span>Faible</span><span>Forte</span></div></div>
+      <div class="map-help"><b>Clique sur une commune</b><span>pour ouvrir sa fiche énergétique</span></div>
+      <button id="home" class="home">⌂ Recentrer</button>
+      <div class="stats" id="stats"></div>
+      <aside id="drawer" class="drawer" aria-live="polite"><button id="close" aria-label="Fermer">×</button><div id="drawerContent"></div></aside>
+      <section id="dashboard" class="dashboard" hidden><div class="dash-head"><div><p class="kicker">SYNTHÈSE DÉPARTEMENTALE</p><h2>La transition énergétique en un regard</h2></div><button id="closeDashboard">Retour à la carte</button></div><div id="dashboardContent"></div></section>
+    </section>
+  </main>
+  <footer><span>DDT du Val-d’Oise · Atlas territorial</span><span>Licence Ouverte 2.0 · ODbL selon les sources</span></footer>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="app.js"></script>
+</body></html>
