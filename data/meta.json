@@ -1,7 +1,9 @@
 {
-  "generated": "2026-07-29T15:18:38.824Z",
+  "generated": "2026-07-29T15:47:26.112Z",
   "consumptionRows": 6120,
   "productionRows": 94,
+  "airparifRows": 184,
+  "airparifDate": "2026-07-29",
   "dpeRows": 262914,
   "communeCount": 183,
   "sources": [

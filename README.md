@@ -7,10 +7,12 @@ Application cartographique de la DDT du Val-d’Oise consacrée aux consommation
 - Agence ORE : consommations annuelles d’électricité et de gaz par commune et secteur (2020–2024)
 - ODRÉ / RTE : registre des installations de production d’électricité en service
 - ADEME : DPE des logements existants depuis juillet 2021, agrégés par commune
-- Airparif : cartographie des concentrations réglementées diffusée en service web
+- Airparif / Atmo Data : indice ATMO et sous-indices quotidiens NO₂, PM10, PM2,5 et O₃ synchronisés puis conservés localement par commune
 - API Découpage administratif : contours, population et référentiel communal
 
 Les données DPE sont uniquement publiées sous forme d’agrégats communaux. La base brute et les adresses ne sont pas conservées.
+
+Les consommations d’électricité et de gaz disposent de couches séparées, en complément de la consommation totale.
 
 ## Actualisation
 
