@@ -36,9 +36,11 @@ const productionRaw = await odsAll(
   "https://odre.opendatasoft.com/api/explore/v2.1/catalog/datasets/registre-national-installation-production-stockage-electricite-agrege/records",
   { where: "codedepartement=\"95\" AND regime=\"En service\"" }
 );
-const production = productionRaw.map(({ codeinseecommune, commune, filiere, technologie, puismaxinstallee, nbinstallations, energieannuelleglissanteinjectee, datemiseenservice_date }) => ({
+const production = productionRaw.map(({ codeinseecommune, commune, nominstallation, filiere, technologie, puismaxinstallee, nbinstallations, energieannuelleglissanteinjectee, datemiseenservice_date, gestionnaire, postesource, tensionraccordement, moderaccordement }) => ({
   code: codeinseecommune, commune, filiere, technologie, puissance_kw: puismaxinstallee || 0,
-  installations: nbinstallations || 1, injection_kwh: energieannuelleglissanteinjectee || 0, mise_en_service: datemiseenservice_date
+  nom: nominstallation, installations: nbinstallations || 1, injection_kwh: energieannuelleglissanteinjectee || 0,
+  mise_en_service: datemiseenservice_date, gestionnaire, poste_source: postesource,
+  tension: tensionraccordement, raccordement: moderaccordement
 }));
 
 const atmoBase = "https://data.atmo-france.org/geoserver/ind/ows";
