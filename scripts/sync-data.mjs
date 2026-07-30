@@ -43,13 +43,6 @@ const production = productionRaw.map(({ codeinseecommune, commune, nominstallati
   tension: tensionraccordement, raccordement: moderaccordement
 }));
 
-const atmoBase = "https://data.atmo-france.org/geoserver/ind/ows";
-const atmoDate = new Date().toISOString().slice(0,10);
-const atmoUrl = new URL(atmoBase);
-Object.entries({ service:"WFS", version:"2.0.0", request:"GetFeature", typeNames:"ind:ind_atmo_2021", outputFormat:"application/json", count:"250", CQL_FILTER:`code_zone LIKE '95%' AND date_ech = '${atmoDate}'` }).forEach(([k,v])=>atmoUrl.searchParams.set(k,v));
-const atmoRaw = await json(atmoUrl);
-const airparif = atmoRaw.features.map(({properties:p})=>({code:p.code_zone,commune:p.lib_zone,date:p.date_ech,qualificatif:p.lib_qual,couleur:p.coul_qual,indice:p.code_qual,no2:p.code_no2,pm10:p.code_pm10,pm25:p.code_pm25,o3:p.code_o3}));
-
 const dpeByCommune = {};
 let dpeCount = 0;
 let dpeUrl = new URL("https://data.ademe.fr/data-fair/api/v1/datasets/dpe03existant/lines");
@@ -73,18 +66,15 @@ const meta = {
   generated: new Date().toISOString(),
   consumptionRows: consumption.length,
   productionRows: production.length,
-  airparifRows: airparif.length,
-  airparifDate: atmoDate,
   dpeRows: dpeCount,
   communeCount: communes.features.length,
-  sources: ["API Découpage administratif", "Agence ORE", "ODRÉ / RTE", "ADEME DPE", "Airparif"]
+  sources: ["API Découpage administratif", "Agence ORE", "ODRÉ / RTE", "ADEME DPE"]
 };
 
 await Promise.all([
   writeFile(new URL("communes.geojson", OUT), JSON.stringify(communes)),
   writeFile(new URL("consommation.json", OUT), JSON.stringify(consumption)),
   writeFile(new URL("production.json", OUT), JSON.stringify(production)),
-  writeFile(new URL("airparif.json", OUT), JSON.stringify(airparif)),
   writeFile(new URL("dpe.json", OUT), JSON.stringify(Object.values(dpeByCommune))),
   writeFile(new URL("meta.json", OUT), JSON.stringify(meta, null, 2))
 ]);

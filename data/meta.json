@@ -2,15 +2,12 @@
   "generated": "2026-07-29T16:15:58.390Z",
   "consumptionRows": 6120,
   "productionRows": 94,
-  "airparifRows": 184,
-  "airparifDate": "2026-07-29",
   "dpeRows": 262914,
   "communeCount": 183,
   "sources": [
     "API Découpage administratif",
     "Agence ORE",
     "ODRÉ / RTE",
-    "ADEME DPE",
-    "Airparif"
+    "ADEME DPE"
   ]
 }

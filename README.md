@@ -1,13 +1,12 @@
 # Observatoire de la transition énergétique du Val-d’Oise
 
-Application cartographique de la DDT du Val-d’Oise consacrée aux consommations d’énergie, à la production renouvelable, à la rénovation énergétique et à la qualité de l’air.
+Application cartographique de la DDT du Val-d’Oise consacrée aux consommations d’énergie, à la production renouvelable et à la rénovation énergétique.
 
 ## Données
 
 - Agence ORE : consommations annuelles d’électricité et de gaz par commune et secteur (2020–2024)
 - ODRÉ / RTE : registre des installations de production d’électricité en service
 - ADEME : DPE des logements existants depuis juillet 2021, agrégés par commune
-- Airparif / Atmo Data : indice ATMO et sous-indices quotidiens NO₂, PM10, PM2,5 et O₃ synchronisés puis conservés localement par commune
 - API Découpage administratif : contours, population et référentiel communal
 
 Les données DPE sont uniquement publiées sous forme d’agrégats communaux. La base brute et les adresses ne sont pas conservées.
